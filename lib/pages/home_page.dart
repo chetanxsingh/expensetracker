@@ -3,6 +3,7 @@ import 'package:expensetracker/components/expense_summary.dart';
 import 'package:expensetracker/components/expense_tile.dart';
 import 'package:expensetracker/models/expense_item.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget{
@@ -15,6 +16,15 @@ class HomePage extends StatefulWidget{
 class _HomePageState extends State<HomePage>{
   final newExpenseNameController = TextEditingController();
   final newExpenseAmaountController = TextEditingController();
+  final _myBox = Hive.openBox("expense_database2");
+
+
+  @override
+  void initState() {
+    
+    super.initState();
+  Provider.of<ExpenseData>(context, listen: false).prepareData();
+}
 
  void addNewExpense(){
   showDialog(
@@ -26,11 +36,18 @@ class _HomePageState extends State<HomePage>{
       children: [
       TextField(
         controller: newExpenseNameController,
+
+        decoration: const InputDecoration(
+          hintText: "Expense Item",
+        ),
       ),
 
       TextField(
         controller: newExpenseAmaountController,
-
+        keyboardType: TextInputType.number,
+         decoration: const InputDecoration(
+          hintText: "Rupees",
+         ),
       ),
     ],
     ),
@@ -45,13 +62,21 @@ class _HomePageState extends State<HomePage>{
  ),
   );
  }
+void deleteExpense(ExpenseItem expense){
+  Provider.of<ExpenseData>(context, listen: false).deleteExpense(expense);
+}
+
+
  void save(){
-ExpenseItem newExpense = ExpenseItem(
+    if(newExpenseNameController.text.isNotEmpty &&
+    newExpenseAmaountController.text.isNotEmpty){
+      ExpenseItem newExpense = ExpenseItem(
   name: newExpenseNameController.text,
    amount: newExpenseAmaountController.text, 
    dateTime: DateTime.now()
    );
 Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
+    }
    Navigator.pop(context);
    clear();
  }
@@ -73,14 +98,17 @@ Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
   Widget build(BuildContext context) {
    return Consumer<ExpenseData>(
     builder: (context, value,child) => Scaffold(
-      backgroundColor: Colors.grey,
-      floatingActionButton: FloatingActionButton(onPressed: addNewExpense,
-      child: Icon(Icons.add),
+      backgroundColor: Color(0xFFe1d8f7),
+      floatingActionButton: FloatingActionButton(
+        onPressed: addNewExpense,
+        backgroundColor: Color(0xFFb596e5),
+         child: const Icon(Icons.add),
     ),
     body: ListView(children: [
       
       ExpenseSummary(startOfWeek: value.startOfWeekDate()),
       
+      const SizedBox(height: 30),
       
       
       ListView.builder(
@@ -92,10 +120,16 @@ Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
         name: value.getAllexpnseList()[index].name,
        amount: value.getAllexpnseList()[index].amount,
         dateTime: value.getAllexpnseList()[index].dateTime,
+       deleteTapped: (p0) => 
+       deleteExpense(value.getAllexpnseList()[index]),
+
+
         ),
-    
+  
       ),
-    ]),
+    ]
+    
+    ),
       
     ),
    );

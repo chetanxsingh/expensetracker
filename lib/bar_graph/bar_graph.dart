@@ -67,11 +67,11 @@ myBarData.initializeBarData();
         BarChartRodData(
           
           toY: data.y,
-          color: Color(0xffc0a7eb),width: 25,
-          borderRadius: BorderRadius.circular(4),
+          color: Colors.orangeAccent,width: 23,
+          borderRadius: BorderRadius.circular(5),
           backDrawRodData: BackgroundBarChartRodData(show: true,
           toY: maxY,
-          color: Color(0xffd7c8f3),
+          color: Color(0xffffd289),
           
           )
           

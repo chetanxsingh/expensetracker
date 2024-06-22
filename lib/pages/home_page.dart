@@ -98,10 +98,10 @@ Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
   Widget build(BuildContext context) {
    return Consumer<ExpenseData>(
     builder: (context, value,child) => Scaffold(
-      backgroundColor: Colors.white70,
+      backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
         onPressed: addNewExpense,
-        backgroundColor: Color(0xFFb596e5),
+        backgroundColor: Colors.orangeAccent,
          child: const Icon(Icons.add),
     ),
     body: ListView(children: [

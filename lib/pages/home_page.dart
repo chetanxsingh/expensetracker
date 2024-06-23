@@ -101,7 +101,7 @@ Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
         onPressed: addNewExpense,
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Colors.orange,
          child: const Icon(Icons.add),
     ),
     body: ListView(children: [
